@@ -30,7 +30,7 @@ class AplicacionConPestanas(ctk.CTk):
         self.pedido = Pedido()
 
         self.menus = get_default_menus()  
-
+  
         self.tabview = ctk.CTkTabview(self,command=self.on_tab_change)
         self.tabview.pack(expand=True, fill="both", padx=10, pady=10)
 
@@ -87,7 +87,7 @@ class AplicacionConPestanas(ctk.CTk):
 
         self.boton_agregar_stock = ctk.CTkButton(self.frame_tabla_csv, text="Agregar al Stock")
         self.boton_agregar_stock.pack(side="bottom", pady=10)
-
+ 
     def agregar_csv_al_stock(self):
         if self.df_csv is None:
             CTkMessagebox(title="Error", message="Primero debes cargar un archivo CSV.", icon="warning")
@@ -106,8 +106,19 @@ class AplicacionConPestanas(ctk.CTk):
         self.actualizar_treeview()   
 
     def cargar_csv(self):
-        pass
-        
+        ruta_csv = filedialog.askopenfilename(
+            title="Seleccione el archivo CSV",
+            filetypes=(("CSV", "*.csv"), ("todos los archivos", "*.*"))
+        )
+
+        if ruta_csv:
+            try:
+                self.df_csv = pd.read_csv(ruta_csv)
+                self.mostrar_dataframe_en_tabla(self.df_csv)
+                self.boton_agregar_stock.configure(command=self.agregar_csv_al_stock)
+            except Exception as e:
+                CTkMessagebox(title="Error", message=f"No se pudo cargar el archivo CSV.\n{e}", icon="warning")
+
     def mostrar_dataframe_en_tabla(self, df):
         if self.tabla_csv:
             self.tabla_csv.destroy()
