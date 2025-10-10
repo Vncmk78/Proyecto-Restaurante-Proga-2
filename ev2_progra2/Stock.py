@@ -5,10 +5,14 @@ class Stock:
         self.lista_ingredientes = []
 
     def agregar_ingrediente(self, ingrediente):
-        pass
+        for ing in self.lista_ingredientes:
+            if ing.nombre == ingrediente.nombre and ing.unidad == ingrediente.unidad:
+                ing.cantidad += ingrediente.cantidad
+                return
+        self.lista_ingredientes.append(ingrediente)
 
     def eliminar_ingrediente(self, nombre_ingrediente):
-        pass    
+        pass
 
     def verificar_stock(self):
         pass
