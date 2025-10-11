@@ -98,8 +98,8 @@ class AplicacionConPestanas(ctk.CTk):
             return
         for _, row in self.df_csv.iterrows():
             nombre = str(row['nombre'])
-            cantidad = str(row['cantidad'])
             unidad = str(row['unidad'])
+            cantidad = str(row['cantidad'])
             ingrediente = Ingrediente(nombre=nombre,unidad=unidad,cantidad=cantidad)
             self.stock.agregar_ingrediente(ingrediente)
         CTkMessagebox(title="Stock Actualizado", message="Ingredientes agregados al stock correctamente.", icon="info")
@@ -215,7 +215,7 @@ class AplicacionConPestanas(ctk.CTk):
 
         label_cantidad = ctk.CTkLabel(frame_formulario, text="Unidad:")
         label_cantidad.pack(pady=5)
-        self.combo_unidad = ctk.CTkComboBox(frame_formulario, values=["kg", "unid"])
+        self.combo_unidad = ctk.CTkComboBox(frame_formulario, values=["kg", "unidad"])
         self.combo_unidad.pack(pady=5)
 
         label_cantidad = ctk.CTkLabel(frame_formulario, text="Cantidad:")
