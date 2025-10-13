@@ -1,4 +1,4 @@
-from Ingrediente import Ingrediente
+from ev2_progra2.Ingrediente import Ingrediente
 
 class Stock:
     def __init__(self):
@@ -12,7 +12,10 @@ class Stock:
         self.lista_ingredientes.append(ingrediente)
 
     def eliminar_ingrediente(self, nombre_ingrediente):
-        pass
+        for ing in self.lista_ingredientes:
+            if ing.nombre == nombre_ingrediente:
+                self.lista_ingredientes.remove(ing)
+                return True
 
     def verificar_stock(self):
         pass
