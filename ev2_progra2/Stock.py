@@ -18,7 +18,11 @@ class Stock:
                 return True
 
     def verificar_stock(self):
-        pass
+        ingredientes_disponibles = []
+        for ing in self.lista_ingredientes:
+            if ing.cantidad > 0:
+                ingredientes_disponibles.append(ing)
+        return ingredientes_disponibles
 
     def actualizar_stock(self, nombre_ingrediente, nueva_cantidad):
         pass
