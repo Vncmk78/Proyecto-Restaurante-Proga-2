@@ -9,10 +9,10 @@ def get_default_menus() -> List[IMenu]:
         CrearMenu(
             "Completo",
             [
-                Ingrediente("Vienesa","unid", 1),
-                Ingrediente("Pan de completo","unid", 1),
-                Ingrediente("Palta","kg",0.5),
-                Ingrediente("Tomate","kg",0.2),
+                Ingrediente("Vienesa","unidad", 1),
+                Ingrediente("Pan de completo","unidad", 1),
+                Ingrediente("Palta","unidad",0.5),
+                Ingrediente("Tomate","unidad",0.2),
             ],
             precio=1800,
             icono_path="IMG/icono_hotdog_sin_texto_64x64.png",
