@@ -399,23 +399,31 @@ class AplicacionConPestanas(ctk.CTk):
         
     # elimina el ingrediente seleccionado del stock
     def eliminar_ingrediente(self):
-        pass
+        seleccionado = self.tree.selection()
+        if not seleccionado:
+            CTkMessagebox(title="Error", message="Por favor, selecciona un ingrediente para eliminar.", icon="warning")
+            return
+        # proceso de borrar el item seleccionado
+        item = self.tree.item(seleccionado)
+        nombre_ingrediente = item['values'][0]
+        exito = self.stock.eliminar_ingrediente(nombre_ingrediente)
         
+        if exito:
+            self.actualizar_treeview()
+            CTkMessagebox(title="Ingrediente Eliminado", message=f"El ingrediente '{nombre_ingrediente}' ha sido eliminado del stock.", icon="info")
+        else:
+            CTkMessagebox(title="Error", message=f"No se pudo encontrar el ingrediente '{nombre_ingrediente}' en el stock.", icon="warning")
         
-        
-
     # actualiza la tabla de ingredientes en la interfaz
     def actualizar_treeview(self):
+        
         # elimina la lista para que quede vacia y no se dupliquen
         for item in self.tree.get_children():
             self.tree.delete(item)
             
         # agrega los ingredientes del stock al treeview (al igual que agrega ingredientes que sean ingresados)
         for ingrediente in self.stock.lista_ingredientes:
-            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))
-
-        
-            
+            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))      
 
 if __name__ == "__main__":
     import customtkinter as ctk
