@@ -1,3 +1,6 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from ev2_progra2.ElementoMenu import CrearMenu
 import customtkinter as ctk
 from tkinter import ttk, Toplevel, Label, messagebox
@@ -45,7 +48,7 @@ class AplicacionConPestanas(ctk.CTk):
 
         # agrega los ingredientes del stock al treeview
         for ingrediente in self.stock.lista_ingredientes:
-            self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.unidad, ingrediente.cantidad))    
+            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))    
 
     def on_tab_change(self):
         selected_tab = self.tabview.get()
@@ -394,15 +397,25 @@ class AplicacionConPestanas(ctk.CTk):
         self.stock.agregar_ingrediente(ingrediente)
         self.actualizar_treeview()
         
-
     # elimina el ingrediente seleccionado del stock
     def eliminar_ingrediente(self):
         pass
+        
+        
+        
 
     # actualiza la tabla de ingredientes en la interfaz
     def actualizar_treeview(self):
-        pass
+        # elimina la lista para que quede vacia y no se dupliquen
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+            
+        # agrega los ingredientes del stock al treeview (al igual que agrega ingredientes que sean ingresados)
+        for ingrediente in self.stock.lista_ingredientes:
+            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))
 
+        
+            
 
 if __name__ == "__main__":
     import customtkinter as ctk
