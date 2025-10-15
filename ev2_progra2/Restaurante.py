@@ -1,7 +1,7 @@
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from ev2_progra2.ElementoMenu import CrearMenu, IMenu
+from ev2_progra2.ElementoMenu import CrearMenu
 import customtkinter as ctk
 from tkinter import ttk, Toplevel, Label, messagebox
 from ev2_progra2.Ingrediente import Ingrediente
@@ -48,7 +48,7 @@ class AplicacionConPestanas(ctk.CTk):
 
         # agrega los ingredientes del stock al treeview
         for ingrediente in self.stock.lista_ingredientes:
-            self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.unidad, ingrediente.cantidad))    
+            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))    
 
     def on_tab_change(self):
         selected_tab = self.tabview.get()
@@ -387,6 +387,7 @@ class AplicacionConPestanas(ctk.CTk):
     # toma los datos del formulario y agrega un ingrediente al stock
     def ingresar_ingrediente(self):
         nombre = self.entry_nombre.get()
+        nombre = nombre.title()
         unidad = self.combo_unidad.get()
         cantidad = self.entry_cantidad.get()
         
@@ -413,16 +414,17 @@ class AplicacionConPestanas(ctk.CTk):
             CTkMessagebox(title="Ingrediente Eliminado", message=f"El ingrediente '{nombre_ingrediente}' ha sido eliminado del stock.", icon="info")
         else:
             CTkMessagebox(title="Error", message=f"No se pudo encontrar el ingrediente '{nombre_ingrediente}' en el stock.", icon="warning")
-
+        
     # actualiza la tabla de ingredientes en la interfaz
     def actualizar_treeview(self):
+        
         # elimina la lista para que quede vacia y no se dupliquen
         for item in self.tree.get_children():
             self.tree.delete(item)
             
         # agrega los ingredientes del stock al treeview (al igual que agrega ingredientes que sean ingresados)
         for ingrediente in self.stock.lista_ingredientes:
-            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))
+            self.tree.insert("", "end", values=(ingrediente.nombre, ingrediente.unidad, ingrediente.cantidad))      
 
 if __name__ == "__main__":
     import customtkinter as ctk
