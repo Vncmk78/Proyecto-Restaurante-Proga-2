@@ -37,6 +37,10 @@ class Stock:
         return False
 
     def obtener_elementos_menu(self):
-        pass
+        elementos_menu = [] # creamos lista para guardar los nombres de los ingredientes disponibles
+        for ing in self.lista_ingredientes: 
+            if ing.cantidad > 0: # solo agregamos los ingredientes con cantidad > 0
+                elementos_menu.append(ing.nombre)
+        return elementos_menu
         
 
