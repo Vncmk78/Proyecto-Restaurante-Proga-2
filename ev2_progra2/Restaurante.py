@@ -387,6 +387,7 @@ class AplicacionConPestanas(ctk.CTk):
     # toma los datos del formulario y agrega un ingrediente al stock
     def ingresar_ingrediente(self):
         nombre = self.entry_nombre.get()
+        nombre = nombre.title()
         unidad = self.combo_unidad.get()
         cantidad = self.entry_cantidad.get()
         
