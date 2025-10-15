@@ -29,7 +29,16 @@ class Stock:
         return ingredientes_disponibles
 
     def actualizar_stock(self, nombre_ingrediente, nueva_cantidad):
-        pass
+        nombre_ingrediente = nombre_ingrediente.lower()
+        for ing in self.lista_ingredientes:
+            if ing.nombre.lower() == nombre_ingrediente:
+                ing.cantidad = float(nueva_cantidad) # convertimos a float para evitar errores
+                return True
+        return False
 
     def obtener_elementos_menu(self):
-        pass
+        elementos_menu = [] # creamos lista para guardar los nombres de los ingredientes disponibles
+        for ing in self.lista_ingredientes: 
+            if ing.cantidad > 0: # solo agregamos los ingredientes con cantidad > 0
+                elementos_menu.append(ing.nombre)
+        return elementos_menu
