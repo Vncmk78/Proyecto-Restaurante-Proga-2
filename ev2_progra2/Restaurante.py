@@ -205,8 +205,19 @@ class AplicacionConPestanas(ctk.CTk):
         self.pdf_viewer_boleta = None
         
 
-    def mostrar_boleta(self):
-        pass
+    def generar_boleta(self):
+        if not self.pedido.menus:
+            CTkMessagebox(title="Error", message="No hay menús en el pedido para generar una boleta.", icon="warning")
+            return
+
+        try:
+            boleta = BoletaFacade(self.pedido)
+            mensaje = boleta.generar_boleta()
+            CTkMessagebox(title="Boleta Generada", message=mensaje, icon="info")
+            self.mostrar_boleta()  # actualiza la pestaña 5 automáticamente
+        except Exception as e:
+            CTkMessagebox(title="Error", message=f"No se pudo generar la boleta.\n{e}", icon="warning")
+
 
     def configurar_pestana1(self):
         # Dividir la Pestaña 1 en dos frames
@@ -287,15 +298,48 @@ class AplicacionConPestanas(ctk.CTk):
     
     # generea los menus disponibles dependiendo de los ingredientes en el stock
     def generar_menus(self):
-        pass
+        # Elimina las tarjetas anteriores si ya hay
+        for widget in self.tab4.winfo_children():
+            widget.destroy()
+
+        # Crear un contenedor nuevo para las tarjetas
+        contenedor = ctk.CTkFrame(self.tab4)
+        contenedor.pack(expand=True, fill="both", padx=10, pady=10)
+
+        for menu in self.menus:
+            self.crear_tarjeta(menu)
+
+        CTkMessagebox(title="Carta generada", message="Los menús se han generado correctamente.", icon="info")
+
+
 
     # elimina el menu seleccionado el pedido
     def eliminar_menu(self):
         pass
 
     
-    def generar_boleta(self):
-        pass
+    def mostrar_boleta(self):
+        try:
+            pdf_path = "boleta.pdf"
+            if not os.path.exists(pdf_path):
+                CTkMessagebox(title="Error", message="Primero debes generar una boleta.", icon="warning")
+                return
+
+            # Si ya hay un visor anterior, se destruye
+            if self.pdf_viewer_boleta is not None:
+                try:
+                    self.pdf_viewer_boleta.pack_forget()
+                    self.pdf_viewer_boleta.destroy()
+                except Exception:
+                    pass
+                self.pdf_viewer_boleta = None
+
+            abs_pdf = os.path.abspath(pdf_path)
+            self.pdf_viewer_boleta = CTkPDFViewer(self.pdf_frame_boleta, file=abs_pdf)
+            self.pdf_viewer_boleta.pack(expand=True, fill="both")
+
+        except Exception as e:
+            CTkMessagebox(title="Error", message=f"No se pudo mostrar la boleta.\n{e}", icon="warning")
 
     def configurar_pestana2(self):
         frame_superior = ctk.CTkFrame(self.tab2)
