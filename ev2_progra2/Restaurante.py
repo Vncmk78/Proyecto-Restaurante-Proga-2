@@ -315,7 +315,15 @@ class AplicacionConPestanas(ctk.CTk):
 
     # elimina el menu seleccionado el pedido
     def eliminar_menu(self):
-        pass
+        seleccionado = self.treeview_menu.selection()
+        if not seleccionado:
+            CTkMessagebox(title="Error", message="Por favor, selecciona un menú para eliminar.", icon="warning")
+            return
+        nombre_menu = self.treeview_menu.item(seleccionado)['values'][0]
+        exito = self.pedido.eliminar_menu(nombre_menu)
+        
+        if exito:
+            self.actualizar_treeview_pedido()
 
     
     def mostrar_boleta(self):
