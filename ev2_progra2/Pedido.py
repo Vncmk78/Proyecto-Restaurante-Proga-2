@@ -14,8 +14,13 @@ class Pedido:
         menu.cantidad = cantidad
         self.menus.append(menu)
 
-    def eliminar_menu(self, nombre_menu: str):
-        self.menus = [m for m in self.menus if m.nombre != nombre_menu]
+    def eliminar_menu(self, nombre_menu:str):
+        nombre_menu = nombre_menu.lower()
+        for men in self.menus:
+            if men.nombre.lower() == nombre_menu:
+                self.menus.remove(men)
+                return True
+        return False
 
     def mostrar_pedido(self):
         # Retorna una lista con los datos del pedido para mostrar en la interfaz
