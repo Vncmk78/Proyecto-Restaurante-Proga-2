@@ -7,6 +7,22 @@ from IMenu import IMenu
 def get_default_menus() -> List[IMenu]:
     return [
         CrearMenu(
+            "Papas fritas",
+            [
+                Ingrediente("Papas","unidad", 5)
+            ],
+            precio=500,
+            icono_path="IMG/icono_papas_fritas_sin_texto_64x64.png",
+        ),
+        CrearMenu(
+            "Pepsi",
+            [
+                Ingrediente("Pepsi","unidad", 1),
+            ],
+            precio=1100,
+            icono_path="IMG/icono_pepsi_sin_texto_64x64.png",
+        ),
+        CrearMenu(
             "Completo",
             [
                 Ingrediente("Vienesa","unidad", 1),
@@ -17,4 +33,45 @@ def get_default_menus() -> List[IMenu]:
             precio=1800,
             icono_path="IMG/icono_hotdog_sin_texto_64x64.png",
         ),
+        CrearMenu(
+            "Hamburguesa",
+            [
+                Ingrediente("Pan de hamburguesa","unidad", 1),
+                Ingrediente("Lamina de queso","unidad", 1),
+                Ingrediente("Churrasco de carne","unidad", 1),
+            ],
+            precio=3500,
+            icono_path="IMG/icono_hamburguesa_sin_texto_64x64.png",
+        ),
+        CrearMenu(
+            "Panqueques",
+            [
+                Ingrediente("Panqueques","unidad", 2),
+                Ingrediente("Manjar","unidad", 1),
+                Ingrediente("Azucar flor","unidad", 1),
+            ],
+            precio=2000,
+            icono_path="IMG/icono_panqueques_sin_texto_64x64.png",
+        ),
+        CrearMenu(
+            "Pollo frito",
+            [
+                Ingrediente("Presa de pollo","unidad", 1),
+                Ingrediente("Harina","unidad", 1),
+                Ingrediente("Aceite","unidad", 1),
+            ],
+            precio=2800,
+            icono_path="IMG/icono_pollo_frito_sin_texto_64x64.png",
+        ),
+        CrearMenu(
+            "Ensalada mixta",
+            [
+                Ingrediente("Lechuga", "unidad", 1),
+                Ingrediente("Tomate", "unidad", 1),
+                Ingrediente("Zanahoria rallada", "unidad", 1),
+            ],
+            precio=1500,
+            icono_path="IMG/icono_ensalada_mixta_sin_texto_64x64.png",
+        ),
+
     ]
