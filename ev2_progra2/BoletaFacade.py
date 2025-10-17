@@ -29,7 +29,7 @@ class BoletaFacade:
         pdf.set_font("Arial", size=12)
         pdf.cell(0, 10, "Razón Social del Negocio", ln=True, align='L')
         pdf.cell(0, 10, "RUT: 12345678-9", ln=True, align='L')
-        pdf.cell(0, 10, "Dirección: Calle Falsa 123", ln=True, align='L')
+        pdf.cell(0, 10, "Dirección: Universidad Catolica de Temuco", ln=True, align='L')
         pdf.cell(0, 10, "Teléfono: +56 9 1234 5678", ln=True, align='L')
         pdf.cell(0, 10, f"Fecha: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}", ln=True, align='R')
         pdf.ln(10)
