@@ -93,12 +93,10 @@ def get_default_menus() -> List[IMenu]:
             icono_path="IMG/icono_chorrillana_64x64.png",
         ), 
         CrearMenu(
-            "Empanada",
+            "Empanada queso",
             [
-                Ingrediente("Carne", "unidad", 1),
-                Ingrediente("Cebolla", "unidad", 1),
                 Ingrediente("Masa de empanada", "unidad", 1),
-                Ingrediente("Huevos", "unidad", 0.5),
+                Ingrediente("Queso", "unidad", 1),
             ],
             precio=2200,
             icono_path="IMG/icono_empanada_queso_64x64.png",
