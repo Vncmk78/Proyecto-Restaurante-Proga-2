@@ -1,4 +1,5 @@
 from ElementoMenu import CrearMenu
+from Ingrediente import Ingrediente
 
 class Pedido:
     def __init__(self):
@@ -14,8 +15,12 @@ class Pedido:
         menu.cantidad = cantidad
         self.menus.append(menu)
 
-    def eliminar_menu(self, nombre_menu: str):
-        self.menus = [m for m in self.menus if m.nombre != nombre_menu]
+    def eliminar_menu(self, nombre_menu):
+        for menu in self.menus:
+            if menu.nombre == nombre_menu:
+                self.menus.remove(menu)
+                return True
+        return False
 
     def mostrar_pedido(self):
         # Retorna una lista con los datos del pedido para mostrar en la interfaz
