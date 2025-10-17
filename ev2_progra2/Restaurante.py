@@ -22,54 +22,62 @@ class AplicacionConPestanas(ctk.CTk):
     def __init__(self):
         super().__init__()
         
-        self.title("Gestión de ingredientes y pedidos")
-        self.geometry("870x700")
-        nametofont("TkHeadingFont").configure(size=14)
-        nametofont("TkDefaultFont").configure(size=11)
+        self.title("Gestión de ingredientes y pedidos") # titulo ventana 
+        self.geometry("870x700")  # tamaño de la ventana
+        nametofont("TkHeadingFont").configure(size=14)  # tamaño de la fuente
+        nametofont("TkDefaultFont").configure(size=11)   # tamaño de la fuente
 
-        self.stock = Stock()
-        self.menus_creados = set()
+        self.stock = Stock()  # objeto Stock
+        self.menus_creados = set()  # set para guardar los nombres de los menus creados
 
-        self.pedido = Pedido()
+        self.pedido = Pedido()  # objeto Pedido para manejar menus agregados 
 
-        self.menus = get_default_menus()  
+        self.menus = get_default_menus()  # lista de menus predefinidos desde el catalogo
 
-        self.tabview = ctk.CTkTabview(self,command=self.on_tab_change)
+        # widget para manejar las pestañas(tabview) y asigna la funcion on_tab_change que se ejecuta cuando cambie de pestaña
+        self.tabview = ctk.CTkTabview(self,command=self.on_tab_change) 
+
+
         self.tabview.pack(expand=True, fill="both", padx=10, pady=10)
 
         self.crear_pestanas()
 
     def actualizar_treeview(self):
 
+        # borra los elementos existentes en el treeview
         for item in self.tree.get_children():
             self.tree.delete(item)
 
+        # inserta los ingredientes del stock en el treeview
         for ingrediente in self.stock.lista_ingredientes:
+            # Values define las columnas: Nombre, unidad y cantidad
             self.tree.insert("", "end", values=(ingrediente.nombre,ingrediente.unidad, ingrediente.cantidad))    
 
     def on_tab_change(self):
-        selected_tab = self.tabview.get()
+        selected_tab = self.tabview.get()   # obtiene el nombre de la pestaña seleccionada
         if selected_tab == "carga de ingredientes":
             print('carga de ingredientes')
         if selected_tab == "Stock":
-            self.actualizar_treeview()
+            self.actualizar_treeview()  # actualiza el treeview con los ingredientes del stock
         if selected_tab == "Pedido":
-            self.actualizar_treeview()
+            self.actualizar_treeview()  # actualiza el treeview ver los pedidos
             print('pedido')
         if selected_tab == "Carta restorante":
-            self.actualizar_treeview()
+            self.actualizar_treeview()  # actualiza el treeview para ver la carta
             print('Carta restorante')
         if selected_tab == "Boleta":
-            self.actualizar_treeview()
+            self.actualizar_treeview()  # actualiza el treeview para ver la boleta
             print('Boleta')       
 
     def crear_pestanas(self):
+        # se crean las pestañas(tabview) y se asocian las funciones que se ejecutan cuando cambie de pestaña
         self.tab3 = self.tabview.add("carga de ingredientes")  
         self.tab1 = self.tabview.add("Stock")
         self.tab4 = self.tabview.add("Carta restorante")  
         self.tab2 = self.tabview.add("Pedido")
         self.tab5 = self.tabview.add("Boleta")
         
+        # se llama a las funciones que se ejecutan cuando cambie de pestaña
         self.configurar_pestana1()
         self.configurar_pestana2()
         self.configurar_pestana3()
@@ -77,97 +85,135 @@ class AplicacionConPestanas(ctk.CTk):
         self._configurar_pestana_ver_boleta()
 
     def configurar_pestana3(self):
+        
+        # titulo de arriba
         label = ctk.CTkLabel(self.tab3, text="Carga de archivo CSV")
         label.pack(pady=20)
+
+        # boton para seleccionar y cargar archivo CSV
         boton_cargar_csv = ctk.CTkButton(self.tab3, text="Cargar CSV", fg_color="#1976D2", text_color="white",command=self.cargar_csv)
 
         boton_cargar_csv.pack(pady=10)
 
+        # contenedor para mostrar la tabla de los datos del CSV
         self.frame_tabla_csv = ctk.CTkFrame(self.tab3)
         self.frame_tabla_csv.pack(fill="both", expand=True, padx=10, pady=10)
-        self.df_csv = None   
-        self.tabla_csv = None
 
+        # Variables para manejar contenido CSV
+        self.df_csv = None                  # DataFrame con los datos del CSV
+        self.tabla_csv = None               # Widget para mostrar la tabla de los datos del CSV
+
+        # boton para agregar los datos al stock
         self.boton_agregar_stock = ctk.CTkButton(self.frame_tabla_csv, text="Agregar al Stock")
         self.boton_agregar_stock.pack(side="bottom", pady=10)
 
     def agregar_csv_al_stock(self):
+
+        # verifica si hay un DataFrame cargado
         if self.df_csv is None:
             CTkMessagebox(title="Error", message="Primero debes cargar un archivo CSV.", icon="warning")
             return
-
+        
+        # verifica si el CSV tiene las columnas necesarias
         if 'nombre' not in self.df_csv.columns or 'cantidad' not in self.df_csv.columns:
             CTkMessagebox(title="Error", message="El CSV debe tener columnas 'nombre' y 'cantidad'.", icon="warning")
             return
         
-        for _, row in self.df_csv.iterrows():
+        # recorre cada fila del CSV
+        for _, row in self.df_csv.iterrows():  # 'iterrows()' devuelve pares (índice, fila) que se pueden recorrer como un diccionario
             nombre = str(row['nombre'])
             cantidad = str(row['cantidad'])
             unidad = str(row['unidad'])
             ingrediente = Ingrediente(nombre=nombre,unidad=unidad,cantidad=cantidad)
             self.stock.agregar_ingrediente(ingrediente)
-        
+
+
+        # Mensaje de confirmación y se actualiza el treeview
         CTkMessagebox(title="Stock Actualizado", message="Ingredientes agregados al stock correctamente.", icon="info")
         self.actualizar_treeview()   
 
     def cargar_csv(self):
-        ruta_csv = filedialog.askopenfilename(
+        # ventana para seleccionar el archivo CSV desde el sistema 
+        ruta_csv = filedialog.askopenfilename(  # 'filedialog.askopenfilename()' devuelve la ruta completa del archivo seleccionado
             title="Seleccione el archivo CSV",
             filetypes=(("CSV", "*.csv"), ("todos los archivos", "*.*"))
         )
 
+        # si se selecciono el archivo, se lee
         if ruta_csv:
             try:
-                self.df_csv = pd.read_csv(ruta_csv)
+                # carga el archivo CSV
+                self.df_csv = pd.read_csv(ruta_csv)  # "pd" = pandas
+
+                # mostrar la tabla de los datos del CSV en la ventana
                 self.mostrar_dataframe_en_tabla(self.df_csv)
+
+                # configura el boton para agregar los datos al stock
                 self.boton_agregar_stock.configure(command=self.agregar_csv_al_stock)
             except Exception as e:
+                # si hay un error, muestra un mensaje de error
                 CTkMessagebox(title="Error", message=f"No se pudo cargar el archivo CSV.\n{e}", icon="warning")
 
     def mostrar_dataframe_en_tabla(self, df):
+
+        # si ya existe una tabla, se destruye
         if self.tabla_csv:
             self.tabla_csv.destroy()
 
+        # crea una tabla con los datos del CSV
         self.tabla_csv = ttk.Treeview(self.frame_tabla_csv, columns=list(df.columns), show="headings")
         
+        # configura encabezados y ancho de columnas
         for col in df.columns:
-            self.tabla_csv.heading(col, text=col)
-            self.tabla_csv.column(col, width=100, anchor="center")
+            self.tabla_csv.heading(col, text=col)       # titulo de columna
+            self.tabla_csv.column(col, width=100, anchor="center")  # centra el texto
 
+        # inserta cada fila del CSV en la tabla
         for _, row in df.iterrows():
             self.tabla_csv.insert("", "end", values=list(row))
 
+        # muestra la tabla en la ventana
         self.tabla_csv.pack(expand=True, fill="both", padx=10, pady=10)
 
     def actualizar_treeview_pedido(self):
+
+        # limpia la tabla pedidos
         for item in self.treeview_menu.get_children():
             self.treeview_menu.delete(item)
 
+        # inserta los menus actuales en la tabla
         for menu in self.pedido.menus:
             self.treeview_menu.insert("", "end", values=(menu.nombre, menu.cantidad, f"${menu.precio:.2f}"))
 
     def _configurar_pestana_crear_menu(self):
         contenedor = ctk.CTkFrame(self.tab4)
         contenedor.pack(expand=True, fill="both", padx=10, pady=10)
-
+        
+        # boton para generar la carta PDF
         boton_menu = ctk.CTkButton(contenedor,text="Generar Carta (PDF)",command=self.generar_y_mostrar_carta_pdf)
         boton_menu.pack(pady=10)
 
+        # marco para mostrar la carta PDF
         self.pdf_frame_carta = ctk.CTkFrame(contenedor)
         self.pdf_frame_carta.pack(expand=True, fill="both", padx=10, pady=10)
 
-        self.pdf_viewer_carta = None
+        self.pdf_viewer_carta = None # se inicializa vacio hasta que se genere el PDF
 
     def generar_y_mostrar_carta_pdf(self):
         try:
             # Filtrar los menús disponibles antes de crear el PDF
             menus_disponibles = [m for m in self.menus if self.menu_disponible(m)]
 
+            # si no hay menús disponibles, muestra un mensaje de error
             if not menus_disponibles:
                 CTkMessagebox(title="Carta vacía", message="No hay menús con ingredientes suficientes en stock.", icon="warning")
                 return
+            
 
+            # nombre del archivo PDF
             pdf_path = "carta.pdf"
+
+            # crea el PDF con los menús disponibles
             create_menu_pdf(
                 menus_disponibles, 
                 pdf_path,
@@ -176,7 +222,7 @@ class AplicacionConPestanas(ctk.CTk):
                 moneda="$"
             )
 
-            # Mostrar el PDF
+            # si ya hay un PDF abieto, se destruye para mostrar el nuevo
             if self.pdf_viewer_carta is not None:
                 try:
                     self.pdf_viewer_carta.pack_forget()
@@ -185,11 +231,13 @@ class AplicacionConPestanas(ctk.CTk):
                     pass
                 self.pdf_viewer_carta = None
 
-            abs_pdf = os.path.abspath(pdf_path)
+            # Muestra el PDF dentro del marco creado anteriormente
+            abs_pdf = os.path.abspath(pdf_path) # se convierte la ruta relativa a absoluta
             self.pdf_viewer_carta = CTkPDFViewer(self.pdf_frame_carta, file=abs_pdf)
             self.pdf_viewer_carta.pack(expand=True, fill="both")
 
         except Exception as e:
+            # Muestra un mensaje de error si hay algún error
             CTkMessagebox(title="Error", message=f"No se pudo generar/mostrar la carta.\n{e}", icon="warning")
 
     def _configurar_pestana_ver_boleta(self):
