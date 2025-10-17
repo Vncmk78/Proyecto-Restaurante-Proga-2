@@ -79,7 +79,7 @@ def get_default_menus() -> List[IMenu]:
                 Ingrediente("Coca cola", "unidad", 1),
             ],
             precio=1000,
-            icono_path="IMG/icono_coca_lata_64x64.png",
+            icono_path="IMG/icono_cola_lata_64x64.png",
         ),
         CrearMenu(
             "Chorrillana",
