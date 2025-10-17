@@ -325,15 +325,43 @@ class AplicacionConPestanas(ctk.CTk):
         return True
 
     def eliminar_menu(self):
+        """
+        Elimina un menú del pedido y devuelve los ingredientes al stock.
+        """
         seleccionado = self.treeview_menu.selection()
         if not seleccionado:
             CTkMessagebox(title="Error", message="Por favor, selecciona un menú para eliminar.", icon="warning")
             return
-        nombre_menu = self.treeview_menu.item(seleccionado)['values'][0]
+
+        item = self.treeview_menu.item(seleccionado)
+        nombre_menu = item['values'][0]
+        cantidad_menu = int(item['values'][1])  # Obtener la cantidad del menú a eliminar
+
+        # Recuperar el menú completo del pedido
+        menu_a_eliminar = next((menu for menu in self.pedido.menus if menu.nombre == nombre_menu), None)
+
+        if not menu_a_eliminar:
+            CTkMessagebox(title="Error", message="No se encontró el menú seleccionado en el pedido.", icon="warning")
+            return
+
+        # Devolver los ingredientes al stock
+        for ingrediente_necesario in menu_a_eliminar.ingredientes:
+            for _ in range(cantidad_menu):  # Iterar según la cantidad del menú
+                for ingrediente_stock in self.stock.lista_ingredientes:
+                    if ingrediente_necesario.nombre == ingrediente_stock.nombre:
+                        ingrediente_stock.cantidad = str(int(ingrediente_stock.cantidad) + int(ingrediente_necesario.cantidad))
+                        break  # Salir del bucle interno una vez que se ha encontrado y actualizado el ingrediente
+
+        # Eliminar el menú del pedido
         exito = self.pedido.eliminar_menu(nombre_menu)
 
         if exito:
             self.actualizar_treeview_pedido()
+            total = self.pedido.calcular_total()
+            self.label_total.configure(text=f"Total: ${total:.2f}")
+            CTkMessagebox(title="Menú Eliminado", message=f"El menú '{nombre_menu}' ha sido eliminado del pedido y los ingredientes devueltos al stock.", icon="info")
+        else:
+            CTkMessagebox(title="Error", message=f"No se pudo eliminar el menú '{nombre_menu}' del pedido.", icon="warning")
 
     def generar_boleta(self):
         pass
