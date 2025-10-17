@@ -1,3 +1,4 @@
+import os
 from ElementoMenu import CrearMenu
 import customtkinter as ctk
 from tkinter import ttk, Toplevel, Label, messagebox
@@ -302,7 +303,10 @@ class AplicacionConPestanas(ctk.CTk):
             CTkMessagebox(title="Stock Insuficiente", message=f"No hay suficientes ingredientes para preparar el menú '{menu.nombre}'.", icon="warning")
 
     def cargar_icono_menu(self, ruta_icono):
-        imagen = Image.open(ruta_icono)
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        ruta_completa = os.path.join(base_path, ruta_icono)
+
+        imagen = Image.open(ruta_completa)
         icono_menu = ctk.CTkImage(imagen, size=(64, 64))
         return icono_menu
 
