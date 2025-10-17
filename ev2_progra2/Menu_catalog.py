@@ -48,7 +48,7 @@ def get_default_menus() -> List[IMenu]:
             [
                 Ingrediente("Panqueques","unidad", 2),
                 Ingrediente("Manjar","unidad", 1),
-                Ingrediente("Azucar flor","unidad", 1),
+                Ingrediente("Azucar Flor","unidad", 1),
             ],
             precio=2000,
             icono_path="IMG/icono_panqueques_64x64.png",
@@ -56,7 +56,7 @@ def get_default_menus() -> List[IMenu]:
         CrearMenu(
             "Pollo frito",
             [
-                Ingrediente("Presa de pollo","unidad", 1),
+                Ingrediente("Presa De Pollo","unidad", 1),
                 Ingrediente("Harina","unidad", 1),
                 Ingrediente("Aceite","unidad", 1),
             ],
